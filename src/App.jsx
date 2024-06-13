@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useReducer } from 'react'
+import Header from './Header'
+import Main from './Main'
+
+const initialState = {
+  questions: [],
+  // loading, error, ready, active, finished
+  status: 'loading',
+
+}
+
+function reducer(state, action){
+  switch(action.type){
+    case 'dataReceived':
+      return {
+        ...state,
+        questions: action.payload,
+        status: "ready"
+      };
+    case 'dataFailed':
+      return {
+        ...state,
+        status: 'error'
+      };
+
+    default:
+      throw new Error('Invalid action type');
+  }
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/questions')
+    .then((response) => response.json())
+    .then((data) => dispatch({type: 'dataReceived', payload: data}))
+    .catch((error) => console.error(error))
+  },[]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='app'>
+      <Header/>
+      <Main>
+        <h1>React App</h1>
+        <p>Simple React App with custom hooks</p>
+      </Main>
+    </div>
   )
 }
 
