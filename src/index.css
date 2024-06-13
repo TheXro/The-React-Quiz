@@ -9,7 +9,6 @@
   --color-accent: #ffa94d;
 }
 
-
 * {
   margin: 0;
   padding: 0;
@@ -37,11 +36,11 @@ body {
 }
 
 .main {
-  width: 50rem;
+   min-width: 80vw;
 }
 
 .app-header {
-  width: 66rem;
+  /* width: 66rem; */
   margin-bottom: 4rem;
   display: flex;
   align-items: center;
@@ -162,15 +161,23 @@ progress {
   color: var(--color-light);
 }
 .btn-option.wrong {
-  background-color: var(--color-accent);
   border: 2px solid var(--color-accent);
   color: var(--color-darkest);
 }
 
-.answer {
-  transform: translateX(2rem);
-}
 
+.answer {
+  /* transform: translateX(2rem); */
+  /* scale: 0.8; */
+  background-color: rgb(154, 58, 58);
+  }
+.wrongSelected{
+  animation: shake 0.4s ease;
+  border: 2px solid rgba(173, 14, 14, 0.462);
+  color: rgb(37, 9, 9);
+  background-color: rgb(184, 68, 68);
+
+}
 .result {
   background-color: var(--color-theme);
   color: var(--color-light);
@@ -238,6 +245,24 @@ progress {
   }
   80% {
     background-position: 0% 50%, 50% 50%, 100% 100%;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(1rem);
+  }
+  50% {
+    transform: translateX(-1rem);
+  }
+  75% {
+    transform: translateX(1rem);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 
