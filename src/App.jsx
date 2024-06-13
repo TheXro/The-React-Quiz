@@ -1,60 +1,111 @@
-import React, { useEffect, useReducer } from 'react'
-import Header from './Header'
-import Hero from './Hero'
-import Loader from './Loader'
-import StartScreen from './StartScreen'
-
+import React, { useEffect, useReducer } from "react";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Loader from "./components/Loader";
+import StartScreen from "./components/StartScreen";
+import Question from "./components/Question";
+import NextButton from "./components/NextButton";
+import Progress from "./Progress";
 const initialState = {
   questions: [],
   // loading, error, ready, active, finished
-  status: 'loading',
+  status: "loading",
+  index: 0,
+  answer: null,
+  points: 0,
+};
 
-}
-
-function reducer(state, action){
-  switch(action.type){
-    case 'dataReceived':
+function reducer(state, action) {
+  switch (action.type) {
+    case "dataReceived":
       return {
         ...state,
         questions: action.payload,
-        status: "ready"
+        status: "ready",
       };
-    case 'dataFailed':
+    case "dataFailed":
       return {
         ...state,
-        status: 'error'
+        status: "error",
+      };
+    case "start":
+      return {
+        ...state,
+        status: "active",
+      };
+    case "next":
+      return {
+        ...state,
+        index: state.index + 1,
+      };
+    case "newAnswer":
+      const question = state.questions[state.index]; //can use this also
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
+    case "nextQuestion":
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
       };
 
     default:
-      throw new Error('Invalid action type');
+      throw new Error("Invalid action type");
   }
 }
 
 function App() {
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const numberOfQuestions = state.questions.length;
-
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+  const numberOfQuestions = questions.length;
+  const Maxpoints = questions.reduce((prv, curr) => prv + curr.points, 0);
   useEffect(() => {
-    fetch('http://localhost:3001/questions')
-    .then((response) => response.json())
-    .then((data) => dispatch({type: 'dataReceived', payload: data}))
-    .catch((error) => dispatch({type: 'dataFailed', payload: error}))
-  },[]);
-
-  console.log(state);
+    fetch("http://localhost:3001/questions")
+      .then((response) => response.json())
+      .then((data) => dispatch({ type: "dataReceived", payload: data }))
+      .catch((error) => dispatch({ type: "dataFailed", payload: error }));
+  }, []);
 
   return (
-    <div className='app'>
-      <Header/>
+    <div className="app">
+      <Header />
       <Hero>
-        {state.status === 'loading' && <Loader/>}
-        {state.status === 'error' && <Loader/>}
-        {state.status === 'ready' && <StartScreen numberOfQuestions={numberOfQuestions}/>}
-        {state.status === 'active' && <Question/>}
+        {status === "loading" && <Loader />}
+        {status === "error" && <Loader />}
+        {status === "ready" && (
+          <StartScreen
+            numberOfQuestions={numberOfQuestions}
+            dispatch={dispatch}
+          />
+        )}
+        {status === "active" && (
+          <>
+            <Progress
+              i={index}
+              numQuestions={numberOfQuestions}
+              points={points}
+              Maxpoints={Maxpoints}
+              answer={answer}
+            />
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
+        )}
       </Hero>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
