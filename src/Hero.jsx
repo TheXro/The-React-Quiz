@@ -1,7 +1,7 @@
 import React from 'react'
 
 // eslint-disable-next-line react/prop-types
-function Main({children}) {
+function Hero({children}) {
   return (
     <main className='main'>
         {children}
@@ -9,4 +9,4 @@ function Main({children}) {
   )
 }
 
-export default Main
+export default Hero

@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react'
 import Header from './Header'
-import Main from './Main'
+import Hero from './Hero'
 
 const initialState = {
   questions: [],
@@ -36,16 +36,18 @@ function App() {
     fetch('http://localhost:3001/questions')
     .then((response) => response.json())
     .then((data) => dispatch({type: 'dataReceived', payload: data}))
-    .catch((error) => console.error(error))
+    .catch((error) => dispatch({type: 'dataFailed', payload: error}))
   },[]);
+
+  console.log(state);
 
   return (
     <div className='app'>
       <Header/>
-      <Main>
+      <Hero>
         <h1>React App</h1>
         <p>Simple React App with custom hooks</p>
-      </Main>
+      </Hero>
     </div>
   )
 }
