@@ -6,6 +6,7 @@ import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
 import NextButton from "./components/NextButton";
 import Progress from "./Progress";
+import FinishScreen from "./components/FinishScreen";
 const initialState = {
   questions: [],
   // loading, error, ready, active, finished
@@ -55,6 +56,11 @@ function reducer(state, action) {
         answer: null,
       };
 
+    case "finish":
+      return {
+        ...state,
+        status: "finished",
+      };
     default:
       throw new Error("Invalid action type");
   }
@@ -65,6 +71,7 @@ function App() {
     reducer,
     initialState
   );
+  // console.log(questions)
   const numberOfQuestions = questions.length;
   const Maxpoints = questions.reduce((prv, curr) => prv + curr.points, 0);
   useEffect(() => {
@@ -100,9 +107,10 @@ function App() {
               dispatch={dispatch}
               answer={answer}
             />
-            <NextButton dispatch={dispatch} answer={answer} />
+            <NextButton dispatch={dispatch} answer={answer} index={index} numQuestions={numberOfQuestions} />
           </>
         )}
+        {status === "finished" && (<FinishScreen points={points} maxPoints={Maxpoints}/>)}
       </Hero>
     </div>
   );

@@ -6,7 +6,7 @@ function Question({ question, dispatch, answer }) {
     <div>
       <h4>{question.question}</h4>
       <div>
-        <Options question={question} dispatch={dispatch} answer={answer} />
+        {<Options question={question} dispatch={dispatch} answer={answer} />}
       </div>
     </div>
   );
