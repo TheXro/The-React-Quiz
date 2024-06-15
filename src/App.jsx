@@ -14,6 +14,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  highscore:0,
 };
 
 function reducer(state, action) {
@@ -60,6 +61,7 @@ function reducer(state, action) {
       return {
         ...state,
         status: "finished",
+        highscore: state.points > state.highscore ? state.points : state.highscore,
       };
     default:
       throw new Error("Invalid action type");
@@ -67,7 +69,7 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points, highscore }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -110,7 +112,7 @@ function App() {
             <NextButton dispatch={dispatch} answer={answer} index={index} numQuestions={numberOfQuestions} />
           </>
         )}
-        {status === "finished" && (<FinishScreen points={points} maxPoints={Maxpoints}/>)}
+        {status === "finished" && (<FinishScreen points={points} maxPoints={Maxpoints} highscore={highscore}/>)}
       </Hero>
     </div>
   );
