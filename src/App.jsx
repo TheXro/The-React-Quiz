@@ -14,7 +14,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
-  highscore:0,
+  highscore: 0,
 };
 
 function reducer(state, action) {
@@ -61,7 +61,8 @@ function reducer(state, action) {
       return {
         ...state,
         status: "finished",
-        highscore: state.points > state.highscore ? state.points : state.highscore,
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
       };
     default:
       throw new Error("Invalid action type");
@@ -69,10 +70,8 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [{ questions, status, index, answer, points, highscore }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, highscore }, dispatch] =
+    useReducer(reducer, initialState);
   // console.log(questions)
   const numberOfQuestions = questions.length;
   const Maxpoints = questions.reduce((prv, curr) => prv + curr.points, 0);
@@ -109,10 +108,21 @@ function App() {
               dispatch={dispatch}
               answer={answer}
             />
-            <NextButton dispatch={dispatch} answer={answer} index={index} numQuestions={numberOfQuestions} />
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              index={index}
+              numQuestions={numberOfQuestions}
+            />
           </>
         )}
-        {status === "finished" && (<FinishScreen points={points} maxPoints={Maxpoints} highscore={highscore}/>)}
+        {status === "finished" && (
+          <FinishScreen
+            points={points}
+            maxPoints={Maxpoints}
+            highscore={highscore}
+          />
+        )}
       </Hero>
     </div>
   );

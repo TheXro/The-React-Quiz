@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-function FinishScreen({points, maxPoints, highscore}) {
+function FinishScreen({ points, maxPoints, highscore }) {
   const percentage = (points / maxPoints) * 100;
 
   let emoji;
@@ -16,18 +16,16 @@ function FinishScreen({points, maxPoints, highscore}) {
 
   return (
     <>
-      <p className='result'>
-        <span>{emoji}</span> You socred <strong>{points}</strong> out of 
+      <p className="result">
+        <span>{emoji}</span> You socred <strong>{points}</strong> out of
         {maxPoints}
       </p>
-      <p className='result'>
+      <p className="result">
         Your score is <strong>{percentage}%</strong>
       </p>
-      <p className="highscore">
-        {`Highscore: ${highscore} points`}
-      </p>
+      <p className="highscore">{`Highscore: ${highscore} points`}</p>
     </>
-  )
+  );
 }
 
 export default FinishScreen;
